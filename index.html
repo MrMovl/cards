@@ -6,7 +6,8 @@
   <body>
     <script type="text/javascript" src="cards.js"></script>
     <script>
-      var cards = Elm.Cards.fullscreen({newDate: Date.now()});
+      var cards = Elm.Cards.fullscreen();
+      cards.ports.currentTime.send({newDate: Date.now()});
     </script>
   </body>
 </html>
