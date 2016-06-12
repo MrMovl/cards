@@ -1,2 +1,2 @@
 # cards
-This might become a cards game
+This might become a card game
