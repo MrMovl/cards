@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.App as App
 import Html.Events as Events
 import CardLibrary as Cards
-import Random exposing (Seed, initialSeed)
+import Random
 
 
 port currentTime : (Int -> msg) -> Sub msg
@@ -12,6 +12,8 @@ port currentTime : (Int -> msg) -> Sub msg
 
 type Msg
     = NoOp
+    | NewRandom Int
+    | GenInt
 
 
 type GameState
@@ -28,31 +30,47 @@ type alias Model =
     , opponentDeck : List Cards.Card
     , opponentBoard : List Cards.Card
     , gameState : GameState
-    , seed : Seed
+    , random : Int
     }
 
 
-initialModel : Model
+initialModel : ( Model, Cmd Msg )
 initialModel =
-    { playerHand = []
-    , playerDeck = []
-    , playerBoard = []
-    , opponentHand = []
-    , opponentDeck = []
-    , opponentBoard = []
-    , gameState = Pause
-    , seed = initialSeed 42
-    }
+    ( { playerHand = []
+      , playerDeck = []
+      , playerBoard = []
+      , opponentHand = []
+      , opponentDeck = []
+      , opponentBoard = []
+      , gameState = Pause
+      , random = 0
+      }
+    , Cmd.none
+    )
 
 
-view : Model -> Html Msg
-view model =
-    div [ Events.onClick NoOp ] [ Html.text "Test" ]
+view : ( Model, Cmd Msg ) -> Html Msg
+view ( model, _ ) =
+    div []
+        [ Html.button [ Events.onClick GenInt ]
+            [ Html.text "Generate" ]
+        , model.random
+            |> toString
+            |> Html.text
+        ]
 
 
-update : Msg -> Model -> Model
-update msg model =
-    model
+update : Msg -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+update msg ( model, _ ) =
+    case msg of
+        NoOp ->
+            ( model, Cmd.none )
+
+        GenInt ->
+            ( model, Random.generate NewRandom (Random.int 1 10) )
+
+        NewRandom new ->
+            ( { model | random = new }, Cmd.none )
 
 
 main : Program Never
