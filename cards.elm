@@ -49,8 +49,8 @@ initialModel =
     )
 
 
-view : ( Model, Cmd Msg ) -> Html Msg
-view ( model, _ ) =
+view : Model -> Html Msg
+view model =
     div []
         [ Html.button [ Events.onClick GenInt ]
             [ Html.text "Generate" ]
@@ -60,8 +60,8 @@ view ( model, _ ) =
         ]
 
 
-update : Msg -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-update msg ( model, _ ) =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         NoOp ->
             ( model, Cmd.none )
@@ -75,8 +75,9 @@ update msg ( model, _ ) =
 
 main : Program Never
 main =
-    App.beginnerProgram
-        { model = initialModel
+    App.program
+        { init = initialModel
         , view = view
+        , subscriptions = \_ -> Sub.none
         , update = update
         }
