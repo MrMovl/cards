@@ -3,11 +3,23 @@ port module Cards exposing (..)
 import Html exposing (..)
 import Html.App as App
 import Html.Events as Events
-import CardLibrary as Cards
+import Model exposing (..)
 import Random
 
 
 port currentTime : (Int -> msg) -> Sub msg
+
+
+type alias Model =
+    { playerHand : List Card
+    , playerDeck : List Card
+    , playerBoard : List Card
+    , opponentHand : List Card
+    , opponentDeck : List Card
+    , opponentBoard : List Card
+    , gameState : GameState
+    , random : Int
+    }
 
 
 type Msg
@@ -20,18 +32,7 @@ type GameState
     = Pause
     | PlayerTurn
     | OpponentTurn
-
-
-type alias Model =
-    { playerHand : List Cards.Card
-    , playerDeck : List Cards.Card
-    , playerBoard : List Cards.Card
-    , opponentHand : List Cards.Card
-    , opponentDeck : List Cards.Card
-    , opponentBoard : List Cards.Card
-    , gameState : GameState
-    , random : Int
-    }
+    | StartScreen
 
 
 initialModel : ( Model, Cmd Msg )
